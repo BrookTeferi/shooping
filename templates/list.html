@@ -1,0 +1,36 @@
+<head>
+    <title>
+        Shop
+    </title>
+</head>
+
+<body>
+    <div>
+        {% for product in products %}
+            <h2>{{product.name}}</h2>
+        <span>{{product.title}}</span>
+        <div>
+            {{product.description}}
+        </div>
+
+        {% endfor %}
+    </div>
+
+    <div>
+        <form action="/create/" method="post"> 
+            <input type="text" name="title">
+            <input type="text" name="description">
+            <input type="number" name="price">
+
+            <input type="hidden" name="csrfmiddlewaretoken" value="{{csrf_token}}"> 
+
+            <input type="submit">
+        </form>
+
+
+
+    </div>
+
+
+
+</body>
