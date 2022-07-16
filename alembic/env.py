@@ -5,7 +5,7 @@ from sqlalchemy import pool
 
 from alembic import context
 from databases import Base
-import models
+from shop import models
 # access to the values within the .ini file in use.
 config = context.config
 

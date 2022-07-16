@@ -1,42 +1,43 @@
 from slugify import slugify
 from sqlalchemy import Boolean, TEXT, DECIMAL, Column, Integer, String, DateTime, ForeignKey
 import datetime
-
 from sqlalchemy.orm import relationship
 from sqlalchemy_utils import URLType
-
 from databases import Base
 
 class Category(Base):
-    __tablename__ = 'category'
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
+    __tablename__ = "category"
+
+    id= Column(Integer,primary_key=True)
+    name=Column(String)
     slug= Column(String,unique=True)
 
-    def __init__(self, *args, **kwargs):
-       if not 'slug' in kwargs:
-            kwargs['slug'] = slugify(kwargs.get('name', ''))
+    def __init__(self,*args,**kwargs):
+        if not 'slug' in kwargs:
+            kwargs['slug'] = slugify(kwargs.get('name',''))
+        super(Category, self).__init__(*args,**kwargs)
 
-       super(Category, self).__init__(*args, **kwargs)
+    product_category= relationship("Product", back_populates="catagory_related",foreign_keys="Product.id")
 
-    product_catagory=relationship("Product",back_populated="catagory_related")
 
 class Product(Base):
-    __tablename__ = 'product'
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-    description = Column(TEXT)
-    url=Column(URLType)
-    price = Column(DECIMAL(scale=2))
-    available=Column(Boolean, default=True)
-    created_date=Column(DateTime,default=datetime.datetime.now())
+    __tablename__ = "product"
+
+    id= Column(Integer,primary_key=True)
+    name= Column(String)
+    description= Column(TEXT)
+    url= Column(URLType)
+    price= Column(DECIMAL(scale=2))
+    available= Column(Boolean, default=True)
+    created_date= Column(DateTime, default=datetime.datetime.utcnow)
+    updated= Column(DateTime, onupdate=datetime.datetime.now)
     slug= Column(String,unique=True)
 
-    def __init__(self, *args, **kwargs):
-       if not 'slug' in kwargs:
-            kwargs['slug'] = slugify(kwargs.get('name', ''))
+    def __init__(self,*args,**kwargs):
+        if not 'slug' in kwargs:
+            kwargs['slug'] = slugify(kwargs.get('name',''))
+        super(Product, self).__init__(*args,**kwargs)
 
-       super(Category, self).__init__(*args, **kwargs)
-
-    catagory_id= Column(Integer,ForeignKey("catagory.id"))
-    catagory_related=relationship("Catagory",back_populated="product_catagory")
+    category_id = Column(Integer, ForeignKey("category.id"))
+    catagory_related= relationship("Category", back_populates= "product_category")
+    # product_order= relationship("OrderItem", back_populates="product_related")
