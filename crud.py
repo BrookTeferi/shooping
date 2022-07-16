@@ -7,7 +7,7 @@ def create_product(title:str, description:str,price:int, db: Session):
     db_product = models.Shop(title=title, description=description, price=price)
     db.add(db_product)
     db.commit()
-    db.refresh()
+
     return db_product
 
 def list_products(db: Session):
